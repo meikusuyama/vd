@@ -1,10 +1,3 @@
-%function carCell = carConfig()
-
-%EDIT
-% For running complete_camber_synthesis script:
-function [carCell, carParams, aeroParams] = carConfig()
-
-
 % car parameters (updated 2/4/21)
 carParams = struct();
 carParams.mass = [168.7]; % not including driver (372 lb) [168.7] 204.117
@@ -43,7 +36,8 @@ eParams.shift_time = 0.050; % seconds FOR UPSHIFT ONLY; 150ms for downshift
 DTparams = struct();
 DTparams.final_drive = [33/11];% drivetrain sprocket ratio [33/11] 7.2918
 DTparams.drivetrain_efficiency = [0.87]; % scales torque value  (0.87)
-DTparams.G_d1 = [0]; % differential torque transfer offset due to internal friction  %EDIT [0, 5, 10]
+%DTparams.G_d1 = [0, 5, 10]; % differential torque transfer offset due to internal friction
+DTparams.G_d1 = [0];
 DTparams.G_d2_overrun = 0; % differential torque transfer gain in overrun (not used right now)
 TBR = 1;%1:0.5:4;
 DTparams.G_d2_driving = (TBR-1)./(2+2*TBR); % differential torque transfer gain on power
@@ -65,10 +59,73 @@ tireParams.Fy_parameters = cell2mat(Xbestcell);
 tireParams.friction_scaling_factor = 1.05*0.55; % scales tire forces to account for test/road surface difference
 
 % cell array of gridded parameters
-%[carCell] = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
+[carCell] = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
 
+function Fz = computeFzLoads(carParams, aeroParams, a_y, V)
+% computeFzLoads  Calculate inside/outside tire loads for a given lateral acceleration
+%
+%   Fz = computeFzLoads(carParams, aeroParams, a_y, V)
+%
+%   Inputs:
+%       carParams  - struct containing vehicle parameters (mass, cg height, track width, etc.)
+%       aeroParams - struct containing aero coefficients (cla, distribution)
+%       a_y        - lateral acceleration [m/s^2]
+%       V          - vehicle speed [m/s]
+%
+%   Output:
+%       Fz - struct with fields:
+%              .front_inside
+%              .front_outside
+%              .rear_inside
+%              .rear_outside
+%
+%   Example:
+%       Fz = computeFzLoads(carParams, aeroParams, 1.8*9.81, 25);
 
-% EDIT
-% For running complete_camber_analysis
-carCell = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
+    g = 9.81;
 
+    %% --- 1. Static loads ---
+    m_total = carParams.mass + carParams.driver_weight;  % [kg]
+    W_total = m_total * g;  % [N]
+
+    W_rear  = W_total * carParams.weight_dist;
+    W_front = W_total * (1 - carParams.weight_dist);
+
+    %% --- 2. Aerodynamic downforce ---
+    rho = 1.225; % [kg/m^3]
+    D_total = 0.5 * rho * V^2 * aeroParams.cla; % total downforce [N]
+    D_front = D_total * aeroParams.distribution;
+    D_rear  = D_total * (1 - aeroParams.distribution);
+
+    W_front = W_front + D_front;
+    W_rear  = W_rear  + D_rear;
+
+    %% --- 3. Load transfer from lateral acceleration ---
+    h = carParams.cg_height;
+    t = carParams.track_width;
+
+    % proportion of roll stiffness in front
+    R_sf = carParams.R_sf;  
+
+    % total lateral load transfer (front + rear)
+    dFz_total = (a_y / g) * (h / t) * W_total;
+
+    % split between front/rear using roll stiffness ratio
+    dFz_front = dFz_total * R_sf;
+    dFz_rear  = dFz_total * (1 - R_sf);
+
+    %% --- 4. Calculate per-tire normal loads ---
+    Fz.front_outside = W_front/2 + dFz_front/2;
+    Fz.front_inside  = W_front/2 - dFz_front/2;
+    Fz.rear_outside  = W_rear/2  + dFz_rear/2;
+    Fz.rear_inside   = W_rear/2  - dFz_rear/2;
+
+end
+
+% Main
+%a_y = 1.5 * 9.81     % 1.5 G
+%V = 14.5             % common velocity that generated 1.5 G
+a_y = 0.8 * 9.81     
+V = 16.5            
+Fz = computeFzLoads(carParams, aeroParams, a_y, V);
+disp(Fz)

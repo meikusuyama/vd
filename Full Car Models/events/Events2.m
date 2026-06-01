@@ -27,7 +27,7 @@ classdef Events2 < handle
             obj.accelCar = accelCar;
             
             % maps
-            load('autocross2025.mat');
+            load('track_autocross_2023.mat');
             obj.autocross_track = [arclength; curvature];
             load('2024endurancetrack.mat');
             obj.endurance_track = [arclength; curvature];
