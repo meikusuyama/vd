@@ -73,3 +73,4 @@ tireParams.friction_scaling_factor = 1.05*0.52; % scales tire forces to account 
 
 % cell array of gridded parameters
 [carCell] = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
+
