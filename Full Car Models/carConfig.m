@@ -1,3 +1,4 @@
+
 %function carCell = carConfig()
 
 %EDIT
@@ -7,27 +8,29 @@ function [carCell, carParams, aeroParams] = carConfig()
 
 % car parameters (updated 2/4/21)
 carParams = struct();
-carParams.mass = [168.7]; % not including driver (372 lb) [168.7] 204.117
-carParams.driver_weight = 68; % (150 lb)
-carParams.accel_driver_weight = 68; % (150 lb)
+carParams.mass = [162.8]; % not including driver (366 lb) 
+carParams.driver_weight = 64; %
+carParams.accel_driver_weight = 59; % (130 lb)
 carParams.wheelbase = [62] * 0.0254; % 62 in
-carParams.weight_dist = [0.512]; % percentage of weight in rear
-carParams.track_width = 1.1938; % (47 in)
-carParams.wheel_radius = 0.1956; % loaded 
-% radius (7.7 in)
-carParams.cg_height = [0.3048]; % (12 in) % 0.2965
-carParams.roll_center_height_front = 0.08636; % (3.4 in)
-carParams.roll_center_height_rear = 0.09144; % (3.6 in)
-carParams.R_sf = [0.385]; % proportion of roll stiffness in front (not same as LLTD)
+carParams.weight_dist = [0.522]; % percentage of weight in rear
+carParams.track_width = [47] * 0.0254; % (47 in)
+carParams.wheel_radius = [0.127, 0.1956];  % radius (5, 7.7 in)
+carParams.cg_height = 0.281; % EDIT: [11.75] * 0.0254  (12 in) % 0.2965
+carParams.roll_center_height_front = 0.0876; %EDIT 3.4 * 0.0254; % 
+carParams.roll_center_height_rear = 0.0914; %EDIT 3.6 * 0.0254; % 
+carParams.R_sf = [0.34]; % proportion of roll stiffness in front (not same as LLTD)
 carParams.I_zz = [83.28];%, 82.28]; %kg-m^2
 carParams.ackermann = [1]; %expressed as exponent for current ackermann curve
-carParams.camber_compliance = [0.125/1334];
+carParams.camber_compliance_f =  0; %lateral deg/G
+carParams.camber_compliance_r =  0; 
+carParams.static_r_toe = [0]; %toe in deg, toe out - negative
+carParams.camber_compliance = 0; %EDIT: added
 
 % aero parameters (updated 6/6/22)
 aeroParams = struct();
-aeroParams.cda = [1.56]; % m^2 (1.88)   NEW? 1.56
-aeroParams.cla = [3.66]; % m^2 (3.45)  NEW? 3.66
-aeroParams.distribution = 0.4119; % proportion of downforce in front 0.4119
+aeroParams.cda = [1.31]; %EDIT: 1.48 m^2 (1.88)  
+aeroParams.cla = [3.21]; %EDIT: 3.969 m^2 (3.45) 
+aeroParams.distribution = 0.539; %EDIT: 0.418 proportion of downforce in front
 
 % KTM engine parameters (updated 5/1/19)
 eParams = struct();
@@ -36,7 +39,7 @@ eParams.shift_point = 10000; % approximate 10000   25000
 % these parameters are non-iterable
 eParams.gears = [32/16 30/18 28/20 26/22 24/24]; % updated KTM450[32/16 30/18 28/20 26/22 24/24]
 eParams.primary_reduction = 76/32; % KTM450 76/32
-eParams.torque_fn = KTM450HC(); %KTM450()
+eParams.torque_fn = KTM450(); %KTM450()
 eParams.shift_time = 0.050; % seconds FOR UPSHIFT ONLY; 150ms for downshift
 
 % drivetrain parameters (updated 10/14/23)
