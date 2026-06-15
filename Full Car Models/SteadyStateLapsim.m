@@ -76,7 +76,7 @@ display_point_values_above_bar_flag = true;
 label_cars_automatically_flag = true;
 
 %automatic car labeling
-automatic_label_name = 'Mass kg';
+%automatic_label_name = 'Mass kg';
 %automatic_label_name = 'Camber Compliance f (deg/G)';
 %automatic_label = @(car) (1/2+car.powertrain.G_d2_driving)/(1/2-car.powertrain.G_d2_driving);%TBR
 %automatic_label = @(car) max(car.powertrain.torque_fn(2,:).*car.powertrain.torque_fn(1,:))/5252;
@@ -84,17 +84,20 @@ automatic_label_name = 'Mass kg';
 %automatic_label = @(car) car.tire.gamma;
 %automatic_label = @(car) car.R_sf;
 %automatic_label = @(car) car.static_r_toe;
-automatic_label = @(car) car.M;
+%automatic_label = @(car) car.M;
+
+automatic_label_name = 'Wheelbase (in)'
+automatic_label = @(car) car.W_b / 0.0254
 % 1 to select, 0 to exclude 
 selected_categories = find([ ...
-     0 ... %Accel
-     0 ... %Autocross
-     0 ... %Endurance
-     0 ... %Skidpad
-     0 ... %Total  
+     1 ... %Accel
+     1 ... %Autocross
+     1 ... %Endurance
+     1 ... %Skidpad
+     1 ... %Total  
 ]);
 
-%plot_lapsim_points(carCell, display_point_values_above_bar_flag, true,[], automatic_label_name, automatic_label, selected_categories);
+plot_lapsim_points(carCell, display_point_values_above_bar_flag, true,[], automatic_label_name, automatic_label, selected_categories);
 plot_lapsim_lines(carCell, true, [], automatic_label_name, automatic_label);
 %% Car Plotting
 
