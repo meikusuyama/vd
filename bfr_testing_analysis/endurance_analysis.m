@@ -1,5 +1,5 @@
 
-data = readtable('Alameda_Endurance_Stint_1_LL_2026-04-26T05-41-55.csv');
+data = readtable('testing_data/Alameda_40-50-5ftlbs_repeat_2026-04-25T21-05-31.csv');
 
 figure;
 %{
