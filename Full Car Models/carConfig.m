@@ -3,7 +3,7 @@ function carCell = carConfig()
 % car parameters (updated 2/4/21)
 carParams = struct();
 carParams.mass = [162.8]; % not including driver (366 lb) 
-carParams.driver_weight = 61; %
+carParams.driver_weight = 68; %
 carParams.accel_driver_weight = 59; % (130 lb)
 carParams.wheelbase = [62] * 0.0254; % 62 in
 carParams.weight_dist = [0.512]; % percentage of weight in rear

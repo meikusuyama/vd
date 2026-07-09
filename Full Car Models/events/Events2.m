@@ -62,7 +62,7 @@ classdef Events2 < handle
             % modelled as pure steady state (no longitudinal acceleration)
             % inner radius of skidpad is 7.625 m
             % width of skidpad is 3 m
-            % old lapsim used 8.55 radius - essentially means ~ 1 ft gap from cones
+            % old lapsim used 8.55 radius - essentially means ~ 1 m gap from cones
 
             radius = 8.5;
             [x_table_skid,maxVel,time] = max_skidpad_vel(radius,obj.car);
