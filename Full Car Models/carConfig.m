@@ -12,9 +12,9 @@ carParams.mass = [162.8]; % not including driver (366 lb)
 carParams.driver_weight = 64; %
 carParams.accel_driver_weight = 59; % (130 lb)
 carParams.wheelbase = [62] * 0.0254; % 62 in
-carParams.weight_dist = [0.522]; % percentage of weight in rear
+carParams.weight_dist = [0.521]; % percentage of weight in rear
 carParams.track_width = [47] * 0.0254; % (47 in)
-carParams.wheel_radius = [0.127, 0.1956];  % radius (5, 7.7 in)
+carParams.wheel_radius = [0.127];  % radius (5in = 0.127 , 7.7 in = 0.1956)
 carParams.cg_height = 0.281; % EDIT: [11.75] * 0.0254  (12 in) % 0.2965
 carParams.roll_center_height_front = 0.0876; %EDIT 3.4 * 0.0254; % 
 carParams.roll_center_height_rear = 0.0914; %EDIT 3.6 * 0.0254; % 
@@ -28,9 +28,9 @@ carParams.camber_compliance = 0; %EDIT: added
 
 % aero parameters (updated 6/6/22)
 aeroParams = struct();
-aeroParams.cda = [1.31]; %EDIT: 1.48 m^2 (1.88)  
-aeroParams.cla = [3.21]; %EDIT: 3.969 m^2 (3.45) 
-aeroParams.distribution = 0.539; %EDIT: 0.418 proportion of downforce in front
+aeroParams.cda = [1.35]; %EDIT: 1.48 m^2 (1.88)  
+aeroParams.cla = [3.10]; %EDIT: 3.969 m^2 (3.45) 
+aeroParams.distribution = 0.438; %EDIT: 0.418 proportion of downforce in front
 
 % KTM engine parameters (updated 5/1/19)
 eParams = struct();
@@ -58,7 +58,7 @@ Bparams.max_braking_torque = 840; % total braking torque (Nm)
 
 % tire parameters (updated 5/1/19)
 tireParams = struct();
-tireParams.gamma = [-1.5]; % camber angle
+tireParams.gamma = [-0.5]; % camber angle
 tireParams.p_i = [12]; % pressure
 % these parameters are non-iterable
 load('Fx_combined_parameters_run38_30.mat'); % F_x combined magic formula parameters
@@ -68,10 +68,10 @@ tireParams.Fy_parameters = cell2mat(Xbestcell);
 tireParams.friction_scaling_factor = 1.05*0.55; % scales tire forces to account for test/road surface difference
 
 % cell array of gridded parameters
-%[carCell] = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
+[carCell] = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
 
 
 % EDIT
 % For running complete_camber_analysis
-carCell = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
+%carCell = parameters_loop(carParams,aeroParams,eParams,DTparams,Bparams,tireParams);
 

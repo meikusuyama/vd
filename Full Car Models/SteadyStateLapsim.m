@@ -149,3 +149,33 @@ for i = 1 : numCars
 end
 %engine_sweep(carCell, numCars)
 %tesla_plots(carCell)
+
+
+
+
+car = carCell{1,1};
+
+fprintf('\n===================================================\n');
+fprintf('FULL LAPSIM BASELINE\n');
+fprintf('===================================================\n');
+
+fprintf('Aero:\n');
+fprintf('  CLA = %.3f m^2\n',car.aero.cla);
+fprintf('  CdA = %.3f m^2\n',car.aero.cda);
+fprintf('  CoP front = %.1f %%\n',100*car.aero.D_f);
+fprintf('  CoP rear  = %.1f %%\n',100*car.aero.D_r);
+
+fprintf('\nEvent times:\n');
+fprintf('  Accel      = %.3f s\n',car.comp.times.accel);
+fprintf('  Skidpad    = %.3f s\n',car.comp.times.skidpad);
+fprintf('  Autocross  = %.3f s\n',car.comp.times.autocross);
+fprintf('  Endurance  = %.3f s\n',car.comp.times.endurance);
+
+fprintf('\nPoints:\n');
+fprintf('  Accel      = %.2f\n',car.comp.points.accel);
+fprintf('  Skidpad    = %.2f\n',car.comp.points.skidpad);
+fprintf('  Autocross  = %.2f\n',car.comp.points.autocross);
+fprintf('  Endurance  = %.2f\n',car.comp.points.endurance);
+fprintf('  TOTAL      = %.2f\n',car.comp.points.total);
+
+fprintf('===================================================\n');
